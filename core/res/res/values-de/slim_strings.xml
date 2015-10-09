@@ -24,6 +24,10 @@
   <string name="privacy_guard_notification">Datenschutz aktiv</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> hat keinen Zugriff auf persönliche Daten</string>
   <string name="privacy_guard_custom_notification_detail"><xliff:g id="app">%1$s</xliff:g> hat keinen Zugriff auf benutzerdefinierte Berechtigungen</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permlab_fakePackageSignature">Signatur-Täuschung</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permdesc_fakePackageSignature">Ermöglicht der App das Umgehen der Sicherheit durch Vortäuschen einer anderen Paket-Signatur.</string>
   <string name="default_string">Standard</string>
   <string name="reboot_system" product="tablet">Tablet neu starten</string>
   <string name="reboot_system" product="default">Telefon neu starten</string>
