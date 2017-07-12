@@ -499,6 +499,7 @@ class WindowStateAnimator {
                     "HIDE (performLayout)", null);
             if (mSurfaceControl != null) {
                 mSurfaceShown = false;
+                mService.updateNonSystemOverlayWindowsVisibilityIfNeeded(mWin, false);
                 try {
                     mSurfaceControl.hide();
                 } catch (RuntimeException e) {
@@ -1801,6 +1802,7 @@ class WindowStateAnimator {
             if (mSurfaceControl != null) {
                 mSurfaceShown = true;
                 mSurfaceControl.show();
+                mService.updateNonSystemOverlayWindowsVisibilityIfNeeded(mWin, true);
                 if (mWin.mTurnOnScreen) {
                     if (DEBUG_VISIBILITY) Slog.v(TAG,
                             "Show surface turning screen on: " + mWin);
