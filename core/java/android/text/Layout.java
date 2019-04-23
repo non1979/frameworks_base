@@ -290,7 +290,7 @@ public abstract class Layout {
                 }
             }
 
-            boolean hasTab = getLineContainsTab(lineNum);
+            boolean hasTab = getLineContainsTab(i);
             // Can't tell if we have tabs for sure, currently
             if (hasTab && !tabStopsIsInitialized) {
                 if (tabStops == null) {

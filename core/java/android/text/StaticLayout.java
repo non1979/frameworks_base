@@ -311,33 +311,6 @@ public class StaticLayout extends Layout {
                         } else {
                             w = TabStops.nextDefaultStop(w, TAB_INCREMENT);
                         }
-                    } else if (c >= CHAR_FIRST_HIGH_SURROGATE && c <= CHAR_LAST_LOW_SURROGATE
-                            && j + 1 < spanEnd) {
-                        int emoji = Character.codePointAt(chs, j - paraStart);
-
-                        if (emoji >= MIN_EMOJI && emoji <= MAX_EMOJI) {
-                            Bitmap bm = EMOJI_FACTORY.getBitmapFromAndroidPua(emoji);
-
-                            if (bm != null) {
-                                Paint whichPaint;
-
-                                if (spanned == null) {
-                                    whichPaint = paint;
-                                } else {
-                                    whichPaint = mWorkPaint;
-                                }
-
-                                float wid = bm.getWidth() * -whichPaint.ascent() / bm.getHeight();
-
-                                w += wid;
-                                hasTab = true;
-                                j++;
-                            } else {
-                                w += widths[j - paraStart];
-                            }
-                        } else {
-                            w += widths[j - paraStart];
-                        }
                     } else {
                         w += widths[j - paraStart];
                     }
