@@ -265,7 +265,6 @@ public class StaticLayout extends Layout {
             // same as fitWidth but not including any trailing whitespace
             float fitWidthGraphing = w;
 
-            boolean hasTabOrEmoji = false;
             boolean hasTab = false;
             TabStops tabStops = null;
 
@@ -298,7 +297,6 @@ public class StaticLayout extends Layout {
                     } else if (c == CHAR_TAB) {
                         if (hasTab == false) {
                             hasTab = true;
-                            hasTabOrEmoji = true;
                             if (spanned != null) {
                                 // First tab this para, check for tabstops
                                 TabStopSpan[] spans = getParagraphSpans(spanned, paraStart,
@@ -332,7 +330,7 @@ public class StaticLayout extends Layout {
                                 float wid = bm.getWidth() * -whichPaint.ascent() / bm.getHeight();
 
                                 w += wid;
-                                hasTabOrEmoji = true;
+                                hasTab = true;
                                 j++;
                             } else {
                                 w += widths[j - paraStart];
@@ -422,7 +420,7 @@ public class StaticLayout extends Layout {
                         }
                         v = out(source, here, ellipseEnd,
                                 above, below, top, bottom,
-                                v, spacingmult, spacingadd, chooseHt,chooseHtv, fm, hasTabOrEmoji,
+                                v, spacingmult, spacingadd, chooseHt,chooseHtv, fm, hasTab,
                                 needMultiply, chdirs, dir, easy, bufEnd, includepad, trackpad,
                                 chs, widths, paraStart, ellipsize, ellipsizedWidth,
                                 currentTextWidth, paint, true);
@@ -471,7 +469,7 @@ public class StaticLayout extends Layout {
                         fitTop, fitBottom,
                         v,
                         spacingmult, spacingadd, chooseHt,
-                        chooseHtv, fm, hasTabOrEmoji,
+                        chooseHtv, fm, hasTab,
                         needMultiply, chdirs, dir, easy, bufEnd,
                         includepad, trackpad, chs,
                         widths, paraStart, ellipsize,
@@ -509,7 +507,7 @@ public class StaticLayout extends Layout {
                       int above, int below, int top, int bottom, int v,
                       float spacingmult, float spacingadd,
                       LineHeightSpan[] chooseHt, int[] chooseHtv,
-                      Paint.FontMetricsInt fm, boolean hasTabOrEmoji,
+                      Paint.FontMetricsInt fm, boolean hasTab,
                       boolean needMultiply, byte[] chdirs, int dir,
                       boolean easy, int bufEnd, boolean includePad,
                       boolean trackPad, char[] chs,
@@ -602,7 +600,7 @@ public class StaticLayout extends Layout {
         lines[off + mColumns + START] = end;
         lines[off + mColumns + TOP] = v;
 
-        if (hasTabOrEmoji)
+        if (hasTab)
             lines[off + TAB] |= TAB_MASK;
 
         lines[off + DIR] |= dir << DIR_SHIFT;

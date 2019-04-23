@@ -16,7 +16,6 @@
 
 package android.text;
 
-import android.emoji.EmojiFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
@@ -45,19 +44,6 @@ import java.util.Arrays;
 public abstract class Layout {
     private static final ParagraphStyle[] NO_PARA_SPANS =
         ArrayUtils.emptyArray(ParagraphStyle.class);
-
-    /* package */ static final EmojiFactory EMOJI_FACTORY = EmojiFactory.newAvailableInstance();
-    /* package */ static final int MIN_EMOJI, MAX_EMOJI;
-
-    static {
-        if (EMOJI_FACTORY != null) {
-            MIN_EMOJI = EMOJI_FACTORY.getMinimumAndroidPua();
-            MAX_EMOJI = EMOJI_FACTORY.getMaximumAndroidPua();
-        } else {
-            MIN_EMOJI = -1;
-            MAX_EMOJI = -1;
-        }
-    }
 
     /**
      * Return how wide a layout must be in order to display the
@@ -304,9 +290,9 @@ public abstract class Layout {
                 }
             }
 
-            boolean hasTabOrEmoji = getLineContainsTab(i);
+            boolean hasTab = getLineContainsTab(lineNum);
             // Can't tell if we have tabs for sure, currently
-            if (hasTabOrEmoji && !tabStopsIsInitialized) {
+            if (hasTab && !tabStopsIsInitialized) {
                 if (tabStops == null) {
                     tabStops = new TabStops(TAB_INCREMENT, spans);
                 } else {
@@ -347,11 +333,11 @@ public abstract class Layout {
             }
 
             Directions directions = getLineDirections(i);
-            if (directions == DIRS_ALL_LEFT_TO_RIGHT && !mSpannedText && !hasTabOrEmoji) {
+            if (directions == DIRS_ALL_LEFT_TO_RIGHT && !mSpannedText && !hasTab) {
                 // XXX: assumes there's nothing additional to be done
                 canvas.drawText(buf, start, end, x, lbaseline, paint);
             } else {
-                tl.set(paint, buf, start, end, dir, directions, hasTabOrEmoji, tabStops);
+                tl.set(paint, buf, start, end, dir, directions, hasTab, tabStops);
                 tl.draw(canvas, x, ltop, lbaseline, lbottom);
             }
         }
@@ -651,8 +637,7 @@ public abstract class Layout {
 
     /**
      * Returns whether the specified line contains one or more
-     * characters that need to be handled specially, like tabs
-     * or emoji.
+     * characters that need to be handled specially, like tabs.
      */
     public abstract boolean getLineContainsTab(int line);
 
@@ -835,11 +820,11 @@ public abstract class Layout {
         int start = getLineStart(line);
         int end = getLineEnd(line);
         int dir = getParagraphDirection(line);
-        boolean hasTabOrEmoji = getLineContainsTab(line);
+        boolean hasTab = getLineContainsTab(line);
         Directions directions = getLineDirections(line);
 
         TabStops tabStops = null;
-        if (hasTabOrEmoji && mText instanceof Spanned) {
+        if (hasTab && mText instanceof Spanned) {
             // Just checking this line should be good enough, tabs should be
             // consistent across all lines in a paragraph.
             TabStopSpan[] tabs = getParagraphSpans((Spanned) mText, start, end, TabStopSpan.class);
@@ -849,7 +834,7 @@ public abstract class Layout {
         }
 
         TextLine tl = TextLine.obtain();
-        tl.set(mPaint, mText, start, end, dir, directions, hasTabOrEmoji, tabStops);
+        tl.set(mPaint, mText, start, end, dir, directions, hasTab, tabStops);
         float wid = tl.measure(offset - start, trailing, null);
         TextLine.recycle(tl);
 
@@ -955,9 +940,9 @@ public abstract class Layout {
         int start = getLineStart(line);
         int end = full ? getLineEnd(line) : getLineVisibleEnd(line);
 
-        boolean hasTabsOrEmoji = getLineContainsTab(line);
+        boolean hasTabs = getLineContainsTab(line);
         TabStops tabStops = null;
-        if (hasTabsOrEmoji && mText instanceof Spanned) {
+        if (hasTabs && mText instanceof Spanned) {
             // Just checking this line should be good enough, tabs should be
             // consistent across all lines in a paragraph.
             TabStopSpan[] tabs = getParagraphSpans((Spanned) mText, start, end, TabStopSpan.class);
@@ -973,7 +958,7 @@ public abstract class Layout {
         int dir = getParagraphDirection(line);
 
         TextLine tl = TextLine.obtain();
-        tl.set(mPaint, mText, start, end, dir, directions, hasTabsOrEmoji, tabStops);
+        tl.set(mPaint, mText, start, end, dir, directions, hasTabs, tabStops);
         float width = tl.metrics(null);
         TextLine.recycle(tl);
         return width;
@@ -990,12 +975,12 @@ public abstract class Layout {
     private float getLineExtent(int line, TabStops tabStops, boolean full) {
         int start = getLineStart(line);
         int end = full ? getLineEnd(line) : getLineVisibleEnd(line);
-        boolean hasTabsOrEmoji = getLineContainsTab(line);
+        boolean hasTabs = getLineContainsTab(line);
         Directions directions = getLineDirections(line);
         int dir = getParagraphDirection(line);
 
         TextLine tl = TextLine.obtain();
-        tl.set(mPaint, mText, start, end, dir, directions, hasTabsOrEmoji, tabStops);
+        tl.set(mPaint, mText, start, end, dir, directions, hasTabs, tabStops);
         float width = tl.metrics(null);
         TextLine.recycle(tl);
         return width;

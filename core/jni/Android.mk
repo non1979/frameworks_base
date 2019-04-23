@@ -42,7 +42,6 @@ LOCAL_SRC_FILES:= \
 	android_database_SQLiteConnection.cpp \
 	android_database_SQLiteGlobal.cpp \
 	android_database_SQLiteDebug.cpp \
-	android_emoji_EmojiFactory.cpp \
 	android_view_DisplayEventReceiver.cpp \
 	android_view_Surface.cpp \
 	android_view_SurfaceControl.cpp \
@@ -198,7 +197,6 @@ LOCAL_C_INCLUDES += \
 	external/jpeg \
 	external/harfbuzz_ng/src \
 	external/zlib \
-	frameworks/opt/emoji \
 	libcore/include \
 	$(call include-path-for, audio-utils) \
 	frameworks/minikin/include \
